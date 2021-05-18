@@ -3,7 +3,7 @@
 #
 
 # newest input
-character = None
+character = ''
 
 # read characters
 token = ""
@@ -23,26 +23,30 @@ symbol_table = []
 # constant table
 constant_table = []
 
-#
+# output
 dyd = []
+
+# max length of var
+length = 16
 
 
 # read
 def getchar(buf):
     global ptr
     global character
-    if ptr == len(buf):
-        dyd_return(25, "EOF")
-        return -1
+    global eoln
 
     character = buf[ptr]
 
-    if character == "\n":
-        dyd_return(24, "EOLN")
     ptr += 1
-    if ptr == len(buf):
-        dyd_return(25, "EOF")
+    if ptr >= len(buf):
+        if character == "\n":
+            return -3
         return -1
+
+    if character == "\n":
+        return -2
+
     return 0
 
 
@@ -51,7 +55,7 @@ def getnbc(buf):
     global ptr
     global character
 
-    if ptr == len(buf):
+    if ptr >= len(buf):
         dyd_return(25, "EOF")
         return -1
 
@@ -62,23 +66,33 @@ def getnbc(buf):
         if char == "\n":
             dyd_return(24, "EOLN")
         ptr += 1
-        if ptr == len(buf):
-            dyd_return(25, "EOF")
+        if ptr >= len(buf):
             return -1
         char = buf[ptr]
 
     # write character
     character = char
     ptr += 1
+    if ptr >= len(buf):
+        return -1
+
     return 0
 
 
 # add to token
-def concat():
+def concat(error = []):
     global token
     global character
 
     token += character
+
+    if len(token) > length:
+        # out of range
+        error.append("***LINE:" + str(line()) +
+                     "  length of variable：" + token + "...  out of range")
+        return -1
+
+    return 0
 
 
 # is letter?
@@ -104,11 +118,11 @@ def digit():
 
 
 # roll back
-def retract():
+def retract(reset = ''):
     global character
     global ptr
 
-    character = None
+    character = reset
     ptr -= 1
 
 
@@ -143,3 +157,35 @@ def dyd_return(num, val):
         result += " "
     result += str(num)
     dyd.append(result)
+
+# reset token
+def reset_token():
+    global token
+
+    token = ""
+
+
+# deal with single symbols
+def single():
+    global character
+
+    if character in reserve_table:
+        dyd_return(reserve_table[character], "0")
+        return 0
+
+    return -1
+
+
+# is double?
+def double():
+    global character
+
+    if (character == ">") or (character == "<") or (character == ":"):
+        return 1
+    else:
+        return 0
+
+
+# get line
+def line():
+    return dyd.count("            EOLN 24") + 1
