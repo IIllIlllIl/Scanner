@@ -93,9 +93,11 @@ if __name__ == '__main__':
         else:
             end = 0
 
-    io_file.write_file(p_dyd, scanner_func.dyd)
-    io_file.write_file(p_sc, scanner_func.symbol_table)
-    io_file.add_file(p_sc, scanner_func.constant_table)
-    io_file.write_file(p_err, error)
-
-    print("Scanner finished")
+    if len(buf) != 0:
+        io_file.write_file(p_dyd, scanner_func.dyd)
+        io_file.write_file(p_sc, scanner_func.symbol_table)
+        io_file.add_file(p_sc, scanner_func.constant_table)
+        io_file.write_file(p_err, error)
+        print("Scanner finished")
+    else:
+        print("File not found.")
