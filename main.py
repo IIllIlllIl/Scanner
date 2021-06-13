@@ -9,7 +9,8 @@ import scanner_func
 error = []
 
 if __name__ == '__main__':
-    path = input()
+    #path = input()
+    path = "./tests/test.pas"
     p_err = path[0:len(path)-3] + "err"
     p_dyd = path[0:len(path)-3] + "dyd"
     p_sc = path[0:len(path)-3] + "s_c"
@@ -34,12 +35,12 @@ if __name__ == '__main__':
                 scanner_func.retract()
             id = scanner_func.reserve()
             if id > 0:
-                scanner_func.dyd_return(id, "0")
+                scanner_func.dyd_return(str(id), scanner_func.token)
             else:
-                scanner_func.dyd_return(10, str(scanner_func.symbol()))
+                scanner_func.dyd_return("10", scanner_func.token)
 
             if (end == -2) or (end == -3):
-                scanner_func.dyd_return(24, "EOLN")
+                scanner_func.dyd_return("24", "EOLN")
             scanner_func.reset_token()
 
         # constant
@@ -53,10 +54,10 @@ if __name__ == '__main__':
 
             if end == 0:
                 scanner_func.retract()
-            scanner_func.dyd_return(11, str(scanner_func.constant()))
+            scanner_func.dyd_return("11", str(scanner_func.constant()))
 
             if (end == -2) or (end == -3):
-                scanner_func.dyd_return(24, "EOLN")
+                scanner_func.dyd_return("24", "EOLN")
             scanner_func.reset_token()
 
         # double
@@ -69,7 +70,7 @@ if __name__ == '__main__':
 
             id = scanner_func.reserve()
             if id > 0:
-                scanner_func.dyd_return(id, "0")
+                scanner_func.dyd_return(str(id), scanner_func.token)
                 single = 3
             elif end == 0:
                 scanner_func.retract(char)
@@ -89,7 +90,7 @@ if __name__ == '__main__':
 
         # end of file
         if end == -1:
-            scanner_func.dyd_return(25, "EOF")
+            scanner_func.dyd_return("25", "EOF")
         else:
             end = 0
 

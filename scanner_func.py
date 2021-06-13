@@ -56,7 +56,7 @@ def getnbc(buf):
     global character
 
     if ptr >= len(buf):
-        dyd_return(25, "EOF")
+        dyd_return("25", "EOF")
         return -1
 
     char = buf[ptr]
@@ -64,7 +64,7 @@ def getnbc(buf):
     # remove spaces
     while (char == " ") or (char == "\n") or (char == "\t") or (char == "\f"):
         if char == "\n":
-            dyd_return(24, "EOLN")
+            dyd_return("24", "EOLN")
         ptr += 1
         if ptr >= len(buf):
             return -1
@@ -153,9 +153,9 @@ def constant():
 def dyd_return(num, val):
     result = " " * (16 - len(val))
     result += val + " "
-    if num < 10:
+    if len(num) < 2:
         result += " "
-    result += str(num)
+    result += num
     dyd.append(result)
 
 # reset token
@@ -170,7 +170,7 @@ def single():
     global character
 
     if character in reserve_table:
-        dyd_return(reserve_table[character], "0")
+        dyd_return(str(reserve_table[character]), character)
         return 0
 
     return -1
