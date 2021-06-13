@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
             if end == 0:
                 scanner_func.retract()
-            scanner_func.dyd_return("11", str(scanner_func.constant()))
+            scanner_func.dyd_return("11", scanner_func.token)
 
             if (end == -2) or (end == -3):
                 scanner_func.dyd_return("24", "EOLN")
